@@ -1,0 +1,18 @@
+#!/bin/bash
+#!/bin/bash
+#PBS -q workq
+#PBS -l nodes=1:ppn=20
+#PBS -A hpc_startup_solmazir
+#PBS -l walltime=12:00:00
+#PBS -N Fastqc_18-36
+#PBS -j oe
+
+
+for i in sample_{18..36}; do
+
+fastqc --outdir=/project/solmazir/haoran/fastqc_result/sample13-36_untrimmed /project/maheshid/rawdata/TheraGen/TBD200941_12192_20210510/Sample_${i}/${i}_[12].fq.gz
+
+done
+
+
+fastqc --outdir=/project/solmazir/haoran/fastqc_result /project/solmazir/haoran/Trimed_lib/rrnaRM_trim2/paired_filtered/non-rRNA/sample_24_non_rRNA_*.fq.gz

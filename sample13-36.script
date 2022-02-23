@@ -1,0 +1,38 @@
+#!/bin/bash
+#!/bin/bash
+#PBS -q workq
+#PBS -l nodes=1:ppn=20
+#PBS -A hpc_startup_solmazir
+#PBS -l walltime=12:00:00
+#PBS -N Eutrema_13-36_STAR_Sorted
+#PBS -j oe
+
+
+cd /project/solmazir/haoran/STAR_result
+
+genomeDir=../refgenome/
+sampleDir=../sampleDir/
+resultsDir=../resultsDir/
+
+if [ ! -d "$sampleDir" ]; then
+        echo "ERROR: Samples directory does not exist";
+        exit
+fi
+
+if [ ! -d "$resultsDir" ]; then
+        echo "ERROR: Results directory does not exist";
+        exit
+fi
+
+
+STAR --runMode genomeGenerate --genomeDir $genomeDir \
+ --sjdbGTFfile $genomeDir/drought_filtered.gtf --genomeFastaFiles $genomeDir/Esalsugineum_173_v1.fa --runThreadN 10
+
+for s in sample_{13..36}; do
+
+mkdir -p -v $resultsDir/STAR/${s}sample/ 
+
+STAR --genomeDir $genomeDir/STARindex --readFilesCommand zcat --readFilesIn /project/maheshid/rawdata/TheraGen/TBD200941_12192_20210510/Sample_${s}/${s}_1.fq.gz \
+/project/maheshid/rawdata/TheraGen/TBD200941_12192_20210510/Sample_${s}/${s}_2.fq.gz --runThreadN 10 --limitBAMsortRAM 20000000000 --outSAMtype BAM SortedByCoordinate --outFileNamePrefix $resultsDir/STAR/${s}sample/
+
+done

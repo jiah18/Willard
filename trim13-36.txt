@@ -1,0 +1,23 @@
+#!/bin/bash
+#!/bin/bash
+#PBS -q workq
+#PBS -l nodes=1:ppn=20
+#PBS -A hpc_startup_solmazir
+#PBS -l walltime=12:00:00
+#PBS -N Trim_13-36
+#PBS -j oe
+
+#adaptors are removed from library13-36
+#2022/2/2 Haoran
+
+sampleDir=/project/maheshid/rawdata/TheraGen/TBD200941_12192_20210510/
+outputDir=/work/solmazir/haoran/Trimed_lib
+
+for i in sample_{13..36}; do
+java -jar /project/solmazir/haoran/Trimmomatic-0.39/trimmomatic-0.39.jar \
+PE $sampleDir/Sample_${i}/${i}_1.fq.gz $sampleDir/Sample_${i}/${i}_2.fq.gz \
+$outputDir/paried/${i}_1_paired.fq.gz $outputDir/unpaired/${i}_1_unpaired.fq.gz \
+$outputDir/paired/${i}_2_paired.fq.gz $outputDir/unpaired/${i}_2_unpaired.fq.gz \
+ILLUMINACLIP:/project/solmazir/haoran/refgenome/TruSeq2-PE.fa:2:30:10:2:True LEADING:3 TRAILING:3 MINLEN:36
+
+done

@@ -1,0 +1,26 @@
+#!/bin/bash
+#!/bin/bash
+#PBS -q workq
+#PBS -l nodes=1:ppn=20
+#PBS -A hpc_startup_solmazir
+#PBS -l walltime=12:00:00
+#PBS -N Eutrema_13-36_STAR_rRNAmapping
+#PBS -j oe
+
+
+cd /project/solmazir/haoran/STAR_result
+
+genomeDir=../refgenome/
+
+
+
+STAR --runMode genomeGenerate --genomeDir /project/solmazir/haoran/refgenome/rRNAmapping_index \
+--genomeFastaFiles /project/solmazir/haoran/refgenome/Eutsalg1_0/data/GCF_000478725.1/rna_rRNA.fa --runThreadN 10
+
+for s in sample_{13..36}; do
+
+
+STAR --genomeDir $genomeDir/rRNAmapping_index --readFilesCommand zcat --readFilesIn /project/maheshid/rawdata/TheraGen/TBD200941_12192_20210510/Sample_${s}/${s}_1.fq.gz \
+/project/maheshid/rawdata/TheraGen/TBD200941_12192_20210510/Sample_${s}/${s}_2.fq.gz --runThreadN 10 --limitBAMsortRAM 20000000000 --outFileNamePrefix ./rRNAmapping/${s}/
+
+done

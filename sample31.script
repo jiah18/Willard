@@ -1,0 +1,26 @@
+#!/bin/bash
+#!/bin/bash
+#PBS -q workq
+#PBS -l nodes=1:ppn=20
+#PBS -A hpc_startup_solmazir
+#PBS -l walltime=12:00:00
+#PBS -N Eutrema_31_STAR_edited
+#PBS -j oe
+
+
+cd /project/solmazir/haoran/STAR_result
+
+genomeDir=../refgenome/
+
+
+
+
+
+for s in sample_{13..36}; do
+
+
+
+STAR --genomeDir $genomeDir/STARindex --readFilesCommand zcat --readFilesIn /project/maheshid/rawdata/TheraGen/TBD200941_12192_20210510/Sample_sample_31/sample_31_1.fq.gz \
+/project/maheshid/rawdata/TheraGen/TBD200941_12192_20210510/Sample_sample_31/sample_31_2.fq.gz --runThreadN 10 --limitBAMsortRAM 20000000000 \
+--alignIntronMax 8000 --alignMatesGapMax 8000 --outSAMstrandField intronMotif --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ./resultsDir/sample_31_edited/
+done

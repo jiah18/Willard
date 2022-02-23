@@ -1,0 +1,25 @@
+#!/bin/bash
+#!/bin/bash
+#PBS -q workq
+#PBS -l nodes=1:ppn=20
+#PBS -A hpc_startup_solmazir
+#PBS -l walltime=12:00:00
+#PBS -N rRNAremove_13-36
+#PBS -j oe
+
+#remove rRNAs after trimmed adaptors from library13-36
+#2022/2/8 Haoran
+
+sampleDir=/project/solmazir/haoran/Trimed_lib/adapterRM_trim1/paired 
+outputDir=/project/solmazir/haoran/Trimed_lib/rrnaRM_trim2
+
+for i in sample_{13} ; do
+
+sortmerna --ref /project/solmazir/haoran/refgenome/Eutsalg1_0/data/GCF_000478725.1/rna_rRNA.fa \
+--reads $sampleDir/${i}_1_paired.fq.gz --reads $sampleDir/${i}_2_paired.fq.gz \
+--aligned $outputDir/rRNA/${i}_rRNA --other $outputDir/non-rRNA/${i}_non_rRNA \
+--fastx --num_alignments 1 --paired-in -v -threads 20
+
+done
+
+
